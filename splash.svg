@@ -1,0 +1,47 @@
+<!-- File: splash.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="2732" viewBox="0 0 2048 2732">
+  <title>Panda Royale Splash</title>
+  <defs>
+    <style>
+      .bg{fill:#0e1116}
+      .face{fill:#f5f7fb}
+      .ink{fill:#0a0a0c}
+      .title{fill:#f5f7fb;font-weight:900;font-size:180px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;letter-spacing:.06em}
+      .subtitle{fill:#c6cbd6;font-weight:700;font-size:64px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;letter-spacing:.08em}
+    </style>
+  </defs>
+
+  <!-- Fons ple -->
+  <rect class="bg" x="0" y="0" width="2048" height="2732"/>
+
+  <!-- Safe margin ~12% perimetral -->
+  <g transform="translate(1024,1266)">
+    <!-- Panda (escala gran però amb marge ample per notches) -->
+    <!-- Orelles -->
+    <circle class="ink" cx="-420" cy="-520" r="250"/>
+    <circle class="ink" cx=" 420" cy="-520" r="250"/>
+
+    <!-- Cara -->
+    <circle class="face" cx="0" cy="-120" r="560"/>
+
+    <!-- Pegats ulls -->
+    <ellipse class="ink" cx="-280" cy="-220" rx="280" ry="210"/>
+    <ellipse class="ink" cx=" 280" cy="-220" rx="280" ry="210"/>
+
+    <!-- Ulls -->
+    <circle class="face" cx="-280" cy="-220" r="78"/>
+    <circle class="face" cx=" 280" cy="-220" r="78"/>
+    <circle class="ink"  cx="-280" cy="-220" r="32"/>
+    <circle class="ink"  cx=" 280" cy="-220" r="32"/>
+
+    <!-- Nas -->
+    <path class="ink" d="M -110,10 L 110,10 L 0,140 Z"/>
+
+    <!-- Boca -->
+    <path d="M -210,250 C -100,330 100,330 210,250" fill="none" stroke="#0a0a0c" stroke-width="36" stroke-linecap="round"/>
+
+    <!-- Títol -->
+    <text class="title" text-anchor="middle" x="0" y="740">PANDA ROYALE</text>
+    <text class="subtitle" text-anchor="middle" x="0" y="840">SCOREBOARD</text>
+  </g>
+</svg>

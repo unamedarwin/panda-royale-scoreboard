@@ -1,0 +1,44 @@
+<!-- File: panda-maskable.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Panda Royale Maskable Icon</title>
+  <defs>
+    <style>
+      .bg{fill:#0e1116;}
+      .face{fill:#f5f7fb;}
+      .ink{fill:#0a0a0c;}
+      /* Opcional: guia visual del safe-area (80%) — comenta-ho si no ho vols
+      .safe{fill:none;stroke:#4b5563;stroke-width:2;stroke-dasharray:10 10;opacity:.35}
+      */
+    </style>
+  </defs>
+
+  <!-- Fons ple (permet màscares irregulars sense retalls lletjos) -->
+  <rect class="bg" x="0" y="0" width="1024" height="1024"/>
+
+  <!-- Safe area approx 80% (opcional) -->
+  <!-- <rect class="safe" x="102.4" y="102.4" width="819.2" height="819.2" rx="140" ry="140"/> -->
+
+  <!-- Grup panda una mica més petit (~60%) -->
+  <g transform="translate(512,512) scale(0.82)">
+    <!-- Orelles -->
+    <circle class="ink" cx="-240" cy="-290" r="150"/>
+    <circle class="ink" cx="240"  cy="-290" r="150"/>
+
+    <!-- Cara -->
+    <circle class="face" cx="0" cy="-20" r="320"/>
+
+    <!-- Pegats dels ulls -->
+    <ellipse class="ink" cx="-160" cy="-60" rx="160" ry="120"/>
+    <ellipse class="ink" cx=" 160" cy="-60" rx="160" ry="120"/>
+
+    <!-- Ulls -->
+    <circle class="face" cx="-160" cy="-60" r="44"/>
+    <circle class="face" cx=" 160" cy="-60" r="44"/>
+    <circle class="ink"  cx="-160" cy="-60" r="18"/>
+    <circle class="ink"  cx=" 160" cy="-60" r="18"/>
+
+    <!-- Nas i boca -->
+    <path class="ink" d="M -60,50 L 60,50 L 0,120 Z"/>
+    <path class="ink" d="M -120,170 C -60,220 60,220 120,170" fill="none" stroke="#0a0a0c" stroke-width="22" stroke-linecap="round"/>
+  </g>
+</svg>
