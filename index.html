@@ -3,84 +3,404 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="color-scheme" content="dark">
 <title>Panda Royale – Score</title>
 <style>
   :root{
-    --bg:#0f1013; --panel:#15171c; --ink:#f5f7fb; --muted:#b6bdc9; --grid:#262a33; --shadow:#0008;
+    --bg:#0e1116;            /* fons general */
+    --panel:#141a22;         /* panell/pestanya */
+    --panel-active:#1f2a37;  /* pestanya activa */
+    --ink:#f5f7fb;           /* text principal */
+    --muted:#c6cbd6;         /* text secundari */
+    --grid:#2a3140;          /* línies taula */
+    --focus:#7dd3fc;         /* anell de focus */
+    --btn:#0f1622; --btn-bd:#303a4a;
+
+    --y:#fde047; --y-ink:#3b2f00;
+    --p:#c084fc; --p-ink:#2a0a4a;
+    --b:#60a5fa; --b-ink:#0b2a59;
+    --r:#f87171; --r-ink:#4c0a0a;
+    --g:#34d399; --g-ink:#0b3b2a;
+    --c:#e5e7eb; --c-ink:#1f2937;
+    --pk:#f9a8d4; --pk-ink:#4f0f2f;
   }
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;padding:12px}
-  .sheet{background:#1b1e24;border:1px solid #0b0c10;border-radius:16px;box-shadow:0 18px 72px var(--shadow);padding:14px}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:8px }
+  ::placeholder{ color:#aeb6c5 }
+
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;padding:12px}
+  .sheet{background:linear-gradient(180deg,#18202a,#111822);border:1px solid #0b0e14;border-radius:16px;padding:14px}
   header{text-align:center;margin:4px 0 12px}
-  header h1{margin:0;font-weight:900;font-size:34px;letter-spacing:.06em}
-  header h1 span{font-weight:900}
+  header h1{margin:0;font-weight:900;font-size:32px;letter-spacing:.06em}
+
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin:8px 0}
-  .btn,select{background:#0e1117;color:var(--ink);border:1px solid #2d3340;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+  .btn,select{
+    background:var(--btn); color:var(--ink); border:1px solid var(--btn-bd);
+    border-radius:10px; padding:8px 12px; font-weight:700; cursor:pointer
+  }
+  .btn:hover{border-color:#3b4760}
+
   .names{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
-  .pname{background:#0e1117;color:var(--ink);border:1px solid #2d3340;border-radius:10px;padding:8px 10px;font-weight:700;width:160px;max-width:44vw}
-  .tabs{display:flex;gap:6px;overflow:auto;margin-bottom:8px;border-bottom:1px solid #20232b;padding-bottom:4px}
-  .tab{padding:6px 10px;border:1px solid #2e3340;border-radius:999px;background:#0f1219;font-weight:800;cursor:pointer;white-space:nowrap}
-  .tab.active{background:#1b2130;border-color:#3a4358}
-  .board{border:1px solid var(--grid);border-radius:12px;background:#0e1015;position:relative}
+  .pname{
+    background:#0f1622;color:var(--ink);border:1px solid var(--btn-bd);
+    border-radius:10px;padding:8px 10px;font-weight:700;width:160px
+  }
+
+  .tabs[role="tablist"]{display:flex;gap:6px;overflow:auto;margin-bottom:8px;border-bottom:1px solid #202633;padding-bottom:6px}
+  .tab[role="tab"]{
+    padding:8px 12px;border:1px solid #3a4558;border-radius:999px;
+    background:var(--panel); color:var(--ink); font-weight:800; cursor:pointer; white-space:nowrap
+  }
+  .tab[role="tab"][aria-selected="true"]{
+    background:var(--panel-active); border-color:#5b6a85;
+  }
+
+  .board{border:1px solid var(--grid);border-radius:12px;background:#101723;position:relative}
   .scrollX{overflow-x:auto;overflow-y:hidden;width:100%;touch-action:pan-x;-webkit-overflow-scrolling:touch}
-  table{border-collapse:collapse;min-width:980px;font-size:14px}
-  th,td{border:1px solid #262a33;padding:6px;text-align:center;background:#141820}
-  th.round,td.round{width:50px;font-weight:900;background:#10131a}
-  th.block{font-size:16px;font-weight:900;background:#0b0e14}
-  input[type="number"]{width:70px;background:#0a0d12;color:var(--ink);border:1px solid #2a2f3b;border-radius:8px;padding:6px;text-align:center;font-weight:700}
-  .row-total{font-weight:900;background:#0d1016}
-  tfoot td{background:#0c0f15;font-weight:900}
-  .grand{font-size:18px}
-  .scroll-btn{position:absolute;top:40%;background:#000c;border:none;color:white;font-size:22px;border-radius:50%;padding:8px;cursor:pointer;opacity:0.7}
+  .scroll-btn{
+    position:absolute;top:40%;background:#000c;border:1px solid #2c3647;color:var(--ink);
+    font-size:20px;border-radius:999px;padding:8px;cursor:pointer;opacity:.85;display:none
+  }
   .scroll-btn:hover{opacity:1}
   .scroll-left{left:6px}
   .scroll-right{right:6px}
+
+  table{border-collapse:collapse;min-width:980px;font-size:14px}
+  th,td{border:1px solid var(--grid);padding:6px;text-align:center;background:#131b27;color:var(--ink)}
+  thead th{background:#0f1826}
+  th.round,td.round{width:52px;font-weight:900;background:#0e1520}
+  th.block{font-size:16px;font-weight:900;background:#0b1220}
+  input[type="number"]{
+    width:72px;background:#0a0f19;color:var(--ink);border:1px solid #2a3344;border-radius:8px;
+    padding:8px 6px;text-align:center;font-weight:700
+  }
+  label.glit{font-size:12px;color:var(--muted);display:flex;gap:6px;justify-content:center;align-items:center;margin-top:4px}
+  input[type="checkbox"]{ transform: translateY(1px) }
+
+  .row-total{font-weight:900;background:#0d1420}
+  tfoot td{background:#0b121e;font-weight:900}
+  .grand{font-size:18px}
+
+  /* Color chips (alts contrastos respecte fons) */
+  .chip{display:inline-block;padding:.1em .5em;border-radius:.5em;font-weight:900}
+  .y{background:var(--y); color:var(--y-ink)}
+  .p{background:var(--p); color:var(--p-ink)}
+  .b{background:var(--b); color:var(--b-ink)}
+  .r{background:var(--r); color:var(--r-ink)}
+  .g{background:var(--g); color:var(--g-ink)}
+  .c{background:var(--c); color:var(--c-ink)}
+  .pk{background:var(--pk); color:var(--pk-ink)}
+
+  @media (max-width:720px){
+    table{min-width:900px}
+    input[type="number"]{width:66px}
+    header h1{font-size:28px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto}
+    .scroll-btn{transition:none}
+  }
 </style>
 </head>
 <body>
-<div class="sheet">
+<div class="sheet" id="app">
   <header><h1>PANDA <span>ROYAL</span></h1></header>
+
   <div class="toolbar">
     <div>
-      <label id="lblPlayers">👥 Jugadors</label>
-      <select id="numPlayers"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
-      <button class="btn" id="startBtn">♻️</button>
+      <label id="lblPlayers">👥</label>
+      <select id="numPlayers" aria-label="Nombre de jugadors"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+      <button class="btn" id="startBtn" aria-label="Construir o reiniciar">♻️</button>
     </div>
     <div>
-      <select id="lang"></select>
-      <button class="btn" id="exportBtn">📤</button>
-      <button class="btn" id="importBtn">📥</button>
-      <button class="btn" id="clearBtn">🆕</button>
+      <select id="lang" aria-label="Idioma"></select>
+      <button class="btn" id="exportBtn" aria-label="Exportar">📤</button>
+      <button class="btn" id="importBtn" aria-label="Importar">📥</button>
+      <button class="btn" id="clearBtn"  aria-label="Netejar">🆕</button>
     </div>
   </div>
-  <div class="names" id="nameArea"></div>
-  <div class="tabs" id="tabs"></div>
+
+  <div class="names" id="nameArea" aria-label="Noms de jugadors"></div>
+
+  <!-- Pestanyes accessibles -->
+  <div class="tabs" id="tabs" role="tablist" aria-label="Jugadors"></div>
+
   <div class="board">
-    <button class="scroll-btn scroll-left" id="btnLeft">⬅️</button>
-    <button class="scroll-btn scroll-right" id="btnRight">➡️</button>
+    <button class="scroll-btn scroll-left" id="btnLeft" aria-label="Desplaçar a l'esquerra">⬅️</button>
+    <button class="scroll-btn scroll-right" id="btnRight" aria-label="Desplaçar a la dreta">➡️</button>
     <div class="scrollX" id="scrollX">
-      <table id="scoreTable"></table>
+      <table id="scoreTable" aria-live="polite"></table>
     </div>
   </div>
 </div>
 
 <script>
-// idioma mínim per demo
-const I18N={ca:{players:"Jugadors",total:"TOTAL",round:"Ronda",yellow:"Groc",purple:"Porpra×2",blue:"Blau",red:"Vermell Σ×#",green:"Verd",white:"Blanc",pink:"Rosa",tabTotal:"🏆 Total",namePH:"Jugador"}};
-let curLang="ca"; const ROUNDS=10;
-function blankPlayer(n){return{name:n,rows:Array.from({length:ROUNDS},()=>({y:'',p:'',b:'',glitter:false,rSum:'',rCount:'',g:'',c:'',pk:'',_row:0})),total:0};}
-function newState(n){return{active:0,numPlayers:n,players:Array.from({length:n},(_,i)=>blankPlayer("J"+(i+1)))};}
-function toInt(v){let n=parseInt(v);return isNaN(n)?0:n;}
-function calcRow(r){return r._row=toInt(r.y)+toInt(r.p)*2+toInt(r.b)+(r.glitter?toInt(r.b):0)+toInt(r.rSum)*toInt(r.rCount)+toInt(r.g)+toInt(r.c)+toInt(r.pk);}
-function calcPlayer(p){p.total=p.rows.reduce((a,r)=>a+calcRow(r),0);}
-let state=newState(2);
-const tabs=document.getElementById('tabs'),table=document.getElementById('scoreTable'),scrollX=document.getElementById('scrollX');
-function buildTabs(){tabs.innerHTML='';state.players.forEach((p,i)=>{let b=document.createElement('button');b.className='tab'+(i===state.active?' active':'');b.textContent=`${p.name} (${p.total})`;b.onclick=()=>{state.active=i;buildTabs();buildTable();};tabs.appendChild(b)});let b=document.createElement('button');b.className='tab'+(state.active==='all'?' active':'');b.textContent=I18N[curLang].tabTotal;b.onclick=()=>{state.active='all';buildTabs();buildTable();};tabs.appendChild(b);}
-function buildTable(){const t=I18N[curLang];if(state.active==='all'){table.innerHTML='<tr><th>'+t.players+'</th><th>'+t.total+'</th></tr>'+state.players.map(p=>`<tr><td>${p.name}</td><td>${p.total}</td></tr>`).join('');return;}let p=state.players[state.active];let h='<thead><tr><th>'+t.round+'</th><th>'+t.yellow+'</th><th>'+t.purple+'</th><th>'+t.blue+'</th><th>'+t.red+'</th><th>'+t.green+'</th><th>'+t.white+'</th><th>'+t.pink+'</th><th>'+t.total+'</th></tr></thead><tbody>';for(let r=0;r<ROUNDS;r++){let row=p.rows[r];h+=`<tr><td>${r+1}</td><td><input data-k="y" data-r="${r}" value="${row.y}"></td><td><input data-k="p" data-r="${r}" value="${row.p}"></td><td><input data-k="b" data-r="${r}" value="${row.b}"></td><td><input data-k="rSum" data-r="${r}" value="${row.rSum}" style="width:40px">×<input data-k="rCount" data-r="${r}" value="${row.rCount}" style="width:40px"></td><td><input data-k="g" data-r="${r}" value="${row.g}"></td><td><input data-k="c" data-r="${r}" value="${row.c}"></td><td><input data-k="pk" data-r="${r}" value="${row.pk}"></td><td>${row._row}</td></tr>`}h+='</tbody>';table.innerHTML=h;table.querySelectorAll('input').forEach(inp=>inp.oninput=(e)=>{let k=e.target.dataset.k,r=+e.target.dataset.r;state.players[state.active].rows[r][k]=e.target.value;recalc();});}
-function recalc(){state.players.forEach(calcPlayer);buildTabs();buildTable();}
-buildTabs();buildTable();
-// Scroll buttons
-document.getElementById('btnLeft').onclick=()=>{scrollX.scrollBy({left:-200,behavior:'smooth'});}
-document.getElementById('btnRight').onclick=()=>{scrollX.scrollBy({left:200,behavior:'smooth'});}
+/* ========= I18N ========= */
+const I18N={
+  en:{players:"Players",clear:"🆕 Clear",export:"📤 Export",import:"📥 Import",round:"Round",total:"TOTAL",
+      yellow:"Yellow",purple:"Purple×2",blue:"Blue",glitter:"✨×2",red:"Red  Σ×#",green:"Green",white:"White",pink:"Pink",
+      tabTotal:"🏆 Total",namePH:"Player"},
+  ca:{players:"Jugadors",clear:"🆕 Neteja",export:"📤 Exporta",import:"📥 Importa",round:"Ronda",total:"TOTAL",
+      yellow:"Groc",purple:"Porpra×2",blue:"Blau",glitter:"✨×2",red:"Vermell  Σ×#",green:"Verd",white:"Blanc",pink:"Rosa",
+      tabTotal:"🏆 Total",namePH:"Jugador"},
+  es:{players:"Jugadores",clear:"🆕 Limpiar",export:"📤 Exportar",import:"📥 Importar",round:"Ronda",total:"TOTAL",
+      yellow:"Amarillo",purple:"Morado×2",blue:"Azul",glitter:"✨×2",red:"Rojo  Σ×#",green:"Verde",white:"Blanco",pink:"Rosa",
+      tabTotal:"🏆 Total",namePH:"Jugador"},
+  gl:{players:"Xogadores",clear:"🆕 Limpar",export:"📤 Exportar",import:"📥 Importar",round:"Rolda",total:"TOTAL",
+      yellow:"Amarelo",purple:"Morado×2",blue:"Azul",glitter:"✨×2",red:"Vermello  Σ×#",green:"Verde",white:"Branco",pink:"Rosa",
+      tabTotal:"🏆 Total",namePH:"Xogador"},
+  eu:{players:"Jokalariak",clear:"🆕 Garbitu",export:"📤 Exportatu",import:"📥 Inportatu",round:"Txanda",total:"GUZTIRA",
+      yellow:"Horia",purple:"Morea×2",blue:"Urdina",glitter:"✨×2",red:"Gorria  Σ×#",green:"Berdea",white:"Zuria",pink:"Arrosa",
+      tabTotal:"🏆 Guztira",namePH:"Jokalaria"},
+  fr:{players:"Joueurs",clear:"🆕 Effacer",export:"📤 Exporter",import:"📥 Importer",round:"Manche",total:"TOTAL",
+      yellow:"Jaune",purple:"Violet×2",blue:"Bleu",glitter:"✨×2",red:"Rouge  Σ×#",green:"Vert",white:"Blanc",pink:"Rose",
+      tabTotal:"🏆 Total",namePH:"Joueur"}
+};
+// Només bandera en idiomes inequívocs
+const FLAGS={en:"🇬🇧",es:"🇪🇸",fr:"🇫🇷"};
+
+/* ========= Constants / Storage ========= */
+const ROUNDS=10;
+const KEY='panda-royale-a11y-v1';
+
+/* ========= Model ========= */
+function blankPlayer(name){
+  return { name,
+    rows:Array.from({length:ROUNDS},()=>({y:'',p:'',b:'',glitter:false,rSum:'',rCount:'',g:'',c:'',pk:'',_row:0})),
+    total:0
+  };
+}
+function newState(n, lang){
+  return { active:0, numPlayers:n, lang,
+    players:Array.from({length:n},(_,i)=>blankPlayer(`${I18N[lang].namePH} ${i+1}`))
+  };
+}
+function toInt(v){const n=parseInt(v,10);return Number.isFinite(n)?n:0;}
+function calcRow(r){
+  const y=toInt(r.y), p=toInt(r.p)*2, b=toInt(r.b)*(r.glitter?2:1);
+  const red=toInt(r.rSum)*toInt(r.rCount), g=toInt(r.g), c=toInt(r.c), pk=toInt(r.pk);
+  return (r._row=y+p+b+red+g+c+pk);
+}
+function calcPlayer(p){p.total=p.rows.reduce((a,r)=>a+calcRow(r),0);return p.total;}
+
+/* ========= Load state + language ========= */
+let loaded=null; try{loaded=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+let curLang = (loaded && I18N[loaded.lang]) ? loaded.lang : 'ca';
+let state = loaded || newState(2, curLang);
+
+/* ========= DOM refs ========= */
+const tabs=document.getElementById('tabs');
+const table=document.getElementById('scoreTable');
+const nameArea=document.getElementById('nameArea');
+const selPlayers=document.getElementById('numPlayers');
+const selLang=document.getElementById('lang');
+const lblPlayers=document.getElementById('lblPlayers');
+const scrollX=document.getElementById('scrollX');
+const btnLeft=document.getElementById('btnLeft');
+const btnRight=document.getElementById('btnRight');
+
+/* ========= I18N apply ========= */
+function applyLang(){
+  selLang.innerHTML = Object.keys(I18N).map(k=>{
+    const flag = FLAGS[k] ? FLAGS[k]+' ' : '';
+    return `<option value="${k}" ${k===curLang?'selected':''}>${flag}${k.toUpperCase()}</option>`;
+  }).join('');
+  const t=I18N[curLang];
+  lblPlayers.textContent = `👥 ${t.players}`;
+  document.getElementById('clearBtn').textContent=t.clear;
+  document.getElementById('exportBtn').textContent=t.export;
+  document.getElementById('importBtn').textContent=t.import;
+  selPlayers.value = state.numPlayers;
+}
+selLang.onchange=(e)=>{curLang=e.target.value;state.lang=curLang;save();applyLang();buildNames();buildTabs();buildTable();};
+
+/* ========= Builders ========= */
+function buildNames(){
+  nameArea.innerHTML='';
+  state.players.forEach((p,i)=>{
+    const inp=document.createElement('input');
+    inp.className='pname';
+    inp.placeholder=`${I18N[curLang].namePH} ${i+1}`;
+    inp.value=p.name||inp.placeholder;
+    inp.addEventListener('input',()=>{p.name=inp.value.trim()||inp.placeholder;buildTabs();if(state.active===i)buildTable();save();});
+    nameArea.appendChild(inp);
+  });
+}
+function buildTabs(){
+  tabs.innerHTML='';
+  state.players.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='tab';
+    b.setAttribute('role','tab');
+    b.setAttribute('aria-selected', String(state.active===i));
+    b.textContent=`${p.name} (${p.total||0})`;
+    b.addEventListener('click',()=>{state.active=i;buildTabs();buildTable();save();});
+    tabs.appendChild(b);
+  });
+  const t=document.createElement('button');
+  t.className='tab';
+  t.setAttribute('role','tab');
+  t.setAttribute('aria-selected', String(state.active==='all'));
+  t.textContent=I18N[curLang].tabTotal;
+  t.addEventListener('click',()=>{state.active='all';buildTabs();buildTable();save();});
+  tabs.appendChild(t);
+  // Marca visual la pestanya activa
+  Array.from(tabs.querySelectorAll('[role="tab"]')).forEach(el=>{
+    el.toggleAttribute('data-active', el.getAttribute('aria-selected')==='true');
+    if(el.getAttribute('aria-selected')==='true') el.setAttribute('aria-current','page'); else el.removeAttribute('aria-current');
+  });
+  // Aplica estil active via attribute
+  tabs.querySelectorAll('[role="tab"]').forEach(el=>{
+    if(el.getAttribute('aria-selected')==='true') el.style.background = getComputedStyle(document.documentElement).getPropertyValue('--panel-active');
+    else el.style.background = getComputedStyle(document.documentElement).getPropertyValue('--panel');
+    el.style.color = 'var(--ink)'; // assegura contrast
+    el.style.borderColor = (el.getAttribute('aria-selected')==='true') ? '#5b6a85' : '#3a4558';
+  });
+}
+function numInput(p,r,k,val){
+  return `<input type="number" min="0" inputmode="numeric" data-p="${p}" data-r="${r}" data-k="${k}" value="${val??''}" placeholder="0" aria-label="${k}">`;
+}
+function buildTable(){
+  const T = I18N[curLang];
+  // Vista TOTAL
+  if(state.active==='all'){
+    const sorted=[...state.players].sort((a,b)=>b.total-a.total);
+    let h=`<thead><tr><th>🥇</th><th>${T.players}</th><th>${T.total}</th></tr></thead><tbody>`;
+    sorted.forEach((p,i)=>{const m=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';h+=`<tr><td>${m}</td><td>${p.name}</td><td>${p.total}</td></tr>`;});
+    h+='</tbody>';
+    table.innerHTML=h;
+    updateScrollBtns();
+    return;
+  }
+  // Vista per jugador
+  const i=state.active, pl=state.players[i];
+  let h='<thead>';
+  h+=`<tr><th class="round">${T.round}</th><th class="block" colspan="8">${pl.name} (${pl.total||0})</th></tr>`;
+  h+='<tr><th></th>';
+  h+=`<th><span class="chip y">${T.yellow}</span></th>
+      <th><span class="chip p">${T.purple}</span></th>
+      <th><span class="chip b">${T.blue}</span></th>
+      <th><span class="chip r">${T.red}</span></th>
+      <th><span class="chip g">${T.green}</span></th>
+      <th><span class="chip c">${T.white}</span></th>
+      <th><span class="chip pk">${T.pink}</span></th>
+      <th>${T.total}</th>`;
+  h+='</tr></thead><tbody>';
+
+  for(let r=0;r<ROUNDS;r++){
+    const row=pl.rows[r];
+    const gid = `g-${i}-${r}`;
+    h+=`<tr>`;
+    h+=`<td class="round">${r+1}</td>`;
+    h+=`<td>${numInput(i,r,'y',row.y)}</td>`;
+    h+=`<td>${numInput(i,r,'p',row.p)}</td>`;
+    h+=`<td>${numInput(i,r,'b',row.b)}<label class="glit" for="${gid}"><input id="${gid}" type="checkbox" data-p="${i}" data-r="${r}" data-k="glitter" ${row.glitter?'checked':''}> ${T.glitter}</label></td>`;
+    h+=`<td><div style="display:flex;gap:6px;justify-content:center"><input type="number" placeholder="Σ" aria-label="Suma vermell" data-p="${i}" data-r="${r}" data-k="rSum" value="${row.rSum}" style="width:56px"><input type="number" placeholder="#" aria-label="Nombre de vermells" data-p="${i}" data-r="${r}" data-k="rCount" value="${row.rCount}" style="width:56px"></div></td>`;
+    h+=`<td>${numInput(i,r,'g',row.g)}</td>`;
+    h+=`<td>${numInput(i,r,'c',row.c)}</td>`;
+    h+=`<td>${numInput(i,r,'pk',row.pk)}</td>`;
+    h+=`<td class="row-total" data-p="${i}" data-r="${r}">${row._row||0}</td>`;
+    h+=`</tr>`;
+  }
+  h+=`</tbody><tfoot><tr><td>${T.total}</td><td colspan="7"></td><td class="grand" data-p="${i}">${pl.total||0}</td></tr></tfoot>`;
+  table.innerHTML=h;
+
+  // Listeners
+  table.querySelectorAll('input[type="number"]').forEach(inp=>{
+    inp.addEventListener('input',onNum,{passive:true});
+  });
+  table.querySelectorAll('input[type="checkbox"][data-k="glitter"]').forEach(chk=>{
+    chk.addEventListener('change',onChk,{passive:true});
+  });
+
+  updateScrollBtns();
+}
+
+/* ========= Handlers ========= */
+function onNum(e){
+  const {p,r,k}=e.target.dataset;
+  state.players[+p].rows[+r][k]=e.target.value;
+  recalc();
+}
+function onChk(e){
+  const {p,r}=e.target.dataset;
+  state.players[+p].rows[+r].glitter=e.target.checked;
+  recalc();
+}
+
+/* ========= Recalc / Save ========= */
+function recalc(){
+  state.players.forEach((pl,idx)=>{
+    calcPlayer(pl);
+    if(idx===state.active){
+      pl.rows.forEach((row,r)=>{
+        const cell=document.querySelector(`td.row-total[data-p="${idx}"][data-r="${r}"]`);
+        if(cell) cell.textContent=row._row||0;
+      });
+      const g=document.querySelector(`.grand[data-p="${idx}"]`);
+      if(g) g.textContent=pl.total||0;
+    }
+  });
+  buildTabs(); // refresca totals a les pestanyes (i colors garantits)
+  save();
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+
+/* ========= Scroll buttons ========= */
+function updateScrollBtns(){
+  const showLeft = scrollX.scrollLeft>0;
+  const showRight = (scrollX.scrollLeft + scrollX.clientWidth < scrollX.scrollWidth);
+  btnLeft.style.display = showLeft ? 'block' : 'none';
+  btnRight.style.display = showRight ? 'block' : 'none';
+}
+btnLeft.onclick=()=>{scrollX.scrollBy({left:-240,behavior:"smooth"});}
+btnRight.onclick=()=>{scrollX.scrollBy({left:240,behavior:"smooth"});}
+scrollX.addEventListener('scroll',updateScrollBtns);
+window.addEventListener('resize',updateScrollBtns);
+
+/* ========= Top buttons ========= */
+document.getElementById('startBtn').onclick=()=>{
+  const n=parseInt(selPlayers.value,10)||2;
+  const old = state.players || [];
+  const players = Array.from({length:n},(_,i)=> old[i] ? old[i] : blankPlayer(`${I18N[curLang].namePH} ${i+1}`));
+  state = { active:0, numPlayers:n, lang:curLang, players };
+  applyLang(); buildNames(); buildTabs(); buildTable(); recalc(); save();
+};
+document.getElementById('clearBtn').onclick=()=>{
+  if(!confirm('Reset?')) return;
+  state = newState(state.numPlayers, curLang);
+  buildNames(); buildTabs(); buildTable(); recalc(); save();
+};
+document.getElementById('exportBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='panda-royale.json';
+  document.body.appendChild(a); a.click(); a.remove();
+};
+document.getElementById('importBtn').onclick=()=>{
+  const i=document.createElement('input'); i.type='file'; i.accept='application/json';
+  i.onchange=()=>{
+    const f=i.files[0]; if(!f) return;
+    const r=new FileReader();
+    r.onload=()=>{ try{
+      const data=JSON.parse(r.result);
+      if(!data || !Array.isArray(data.players)) throw new Error('format');
+      state=data; curLang = I18N[state.lang] ? state.lang : curLang;
+      applyLang(); buildNames(); buildTabs(); buildTable(); recalc(); save();
+    }catch(err){ alert('Arxiu invàlid.'); }};
+    r.readAsText(f);
+  };
+  i.click();
+};
+
+/* ========= First render ========= */
+applyLang();
+buildNames();
+buildTabs();
+buildTable();
+recalc();
+updateScrollBtns();
 </script>
 </body>
 </html>
