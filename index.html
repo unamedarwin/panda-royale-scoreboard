@@ -24,8 +24,8 @@
   .tabs{display:flex;gap:6px;overflow:auto;margin-bottom:8px;border-bottom:1px solid #20232b;padding-bottom:4px}
   .tab{padding:6px 10px;border:1px solid #2e3340;border-radius:999px;background:#0f1219;font-weight:800;cursor:pointer;white-space:nowrap}
   .tab.active{background:#1b2130;border-color:#3a4358;box-shadow:inset 0 0 0 2px #ffffff10}
-  .board{border:1px solid var(--grid);border-radius:12px;overflow:hidden;background:#0e1015}
-  table{border-collapse:collapse;width:100%;font-size:14px}
+  .board{border:1px solid var(--grid);border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling: touch;background:#0e1015}
+  table{border-collapse:collapse;min-width:800px;width:100%;font-size:14px}
   th,td{border:1px solid var(--grid);padding:6px;text-align:center;background:#141820}
   th.round,td.round{width:54px;font-weight:900;background:#10131a}
   th.block{font-size:16px;font-weight:900;background:#0b0e14}
